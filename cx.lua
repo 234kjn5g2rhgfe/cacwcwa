@@ -1,4 +1,4 @@
-print("Loading GUI")
+print("Loading GUI 2")
 local mainName = "Anomic V | 2.6.5"
 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
