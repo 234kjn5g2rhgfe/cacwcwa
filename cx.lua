@@ -1,5 +1,5 @@
 print("Loading GUI")
-local mainName = "Anomic V | 2.6.6"
+local mainName = "Anomic V | 2.6.7"
 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
@@ -31,7 +31,6 @@ if syn then
         }),
     })
 end
-
 local chatSettings = require(game:GetService("Chat").ClientChatModules.ChatSettings)
 local chatFrame = game:GetService("Players").LocalPlayer.PlayerGui.Chat.Frame
 chatSettings.WindowResizable = true
@@ -87,7 +86,7 @@ local AutoHeal = false
 local antiCar = false
 local BDelete = false
 local SpeedShotgun = false
-local SpeedSDelay = 0.01
+local SpeedSDelay = 0.05
 local shotMulti = false
 local shotMultiAmmount = 1
 _G.JumpHeight = 30
@@ -308,7 +307,7 @@ print("Loading | 15%")
 -- Combat Section
 local combS = Main:addPage("Main", 5012544693)
 local ASection1 = combS:addSection("Head Hitboxes")
-local ASection2 = combS:addSection("Shotgun Mods")
+local ASection2 = combS:addSection("Shotgun Mods - (Turn off for other weapons)")
 local ASection22 = combS:addSection("Other Mods")
 ASection1:addToggle("Head hitboxes", nil, function(v)
     Hitboxes = v
@@ -329,7 +328,7 @@ ASection2:addToggle("Rapid Shotgun", nil, function(x)
 end)
 ASection2:addDropdown("Rapid Mode", {"Maximum", "Medium", "Low"}, function(x)
     if x == "Maximum" then
-        SpeedSDelay = 0.005
+        SpeedSDelay = 0.00001
         else if x == "Medium" then
             SpeedSDelay = 0.1
             else if x == "Low" then
@@ -345,10 +344,10 @@ ASection2:addButton("No shotgun reload", function()
         end 
     end    
 end)
-ASection22:addToggle("Shot Multiplier - (Don't use with rapidfire)", nil, function(x)   
+ASection2:addToggle("Shot Multiplier", nil, function(x)   
     shotMulti = x        
 end)
-ASection22:addSlider("Shot Ammount", 1, 0, 200, function(v)
+ASection2:addSlider("Shot Ammount", 1, 0, 200, function(v)
     shotMultiAmmount = v
 end)
 ASection22:addToggle("No Impacts", nil, function(x)   
@@ -1162,7 +1161,7 @@ end)
 UIS.InputBegan:Connect(function(a)
     if a.UserInputType == Enum.UserInputType.MouseButton1 and shotMulti then
         for i,v in pairs(LPlayer.Character:GetChildren()) do
-            if v:IsA("Tool") then            
+            if v:IsA("Tool") and v.Name == "Bullpup Shotgun" or v.Name == "Shotgun" or v.Name == "Riot Shotgun" or v.Name == "Sawed Off" then            
                 for i = shotMultiAmmount, 0, -1 do            
                     v.MainGunScript.FireEvent:Fire(mouse)               
                 end
@@ -1345,8 +1344,12 @@ game:GetService("RunService").RenderStepped:connect(function()
       LPlayer.Character.HumanoidRootPart.TouchInterest:Destroy()
     end 
     if BDelete then
-        for i,v in pairs(folderImpacts:GetDescendants()) do            
-            v:Destroy()            
+        if folderImpacts:FindFirstChild("Part") then
+            for i,v in pairs(folderImpacts:GetDescendants()) do   
+                if v ~= nil then         
+                    v:Destroy()   
+                end         
+            end
         end
     end
 end)
