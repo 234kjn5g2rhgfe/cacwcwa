@@ -1,4 +1,4 @@
-print("Loading GUI 2")
+print("Loading GUI")
 local mainName = "Anomic V | 2.6.5"
 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
@@ -62,6 +62,7 @@ local esp_Main_Colour  = Color3.fromRGB(255, 255, 255)
 local rainbow_char     = false
 local rainbow_hair     = false
 -- Player
+local CSEvents = game:GetService("ReplicatedStorage"):WaitForChild("_CS.Events")
 local teamList = require(game:GetService("ReplicatedStorage").Client.TeamList)
 local itemList = require(game.ReplicatedStorage.Client.ItemList)
 local camera   = game:GetService("Workspace").Camera
@@ -87,6 +88,8 @@ local antiCar = false
 local BDelete = false
 local SpeedShotgun = false
 local SpeedSDelay = 0.01
+local shotMulti = false
+local shotMultiAmmount = 1
 _G.JumpHeight = 30
 _G.Enabled = true
 _G.ThemeMode = "Purple" -- Red,Green,White
@@ -342,6 +345,12 @@ ASection2:addButton("No shotgun reload", function()
         end 
     end    
 end)
+ASection22:addToggle("Shot Multiplier - (Don't use with rapidfire)", nil, function(x)   
+    shotMulti = x        
+end)
+ASection22:addSlider("Shot Ammount", 1, 0, 200, function(v)
+    shotMultiAmmount = v
+end)
 ASection22:addToggle("No Impacts", nil, function(x)   
     BDelete = x        
 end)
@@ -402,7 +411,7 @@ end)
 PlrSection:addToggle("Infinite Stamina", nil, function(v)
     infiniteStamina = v    
     for i,x in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-    if x:IsA("LocalScript") and x.Name ~= "KeyDrawer" and x.Name ~= "Animate" and x.Name ~= "AnimationHandler" then if v then
+        if x:IsA("LocalScript") and x.Name ~= "KeyDrawer" and x.Name ~= "Animate" and x.Name ~= "AnimationHandler" then if v then
                 x.Disabled = true
             else
                 x.Disabled = false
@@ -925,6 +934,9 @@ CarSection:addSlider("Acceleration", 1, 0, 10000, function(v)
     ccar = getCurrentVehicle()      
     ccar.VehicleSeat.Default.Value = v 
 end)
+CarSection:addButton("Spawn held Car", function() 
+    CSEvents.SpawnVehicle:FireServer(LPlayer.Character.HumanoidRootPart.CFrame, LPlayer.Character:FindFirstChildWhichIsA("Tool"));     
+end)
 CarSection:addButton("Unlock cars (LOOP)", function() 
     while wait(1) do
         for i,v in pairs(game:GetService("Workspace").PlayerVehicles:GetDescendants()) do
@@ -1144,6 +1156,18 @@ spawn(function()
                 end
             end
         end
+    end
+end)
+--@@@@@@@@@
+UIS.InputBegan:Connect(function(a)
+    if a.UserInputType == Enum.UserInputType.MouseButton1 and shotMulti then
+        for i,v in pairs(LPlayer.Character:GetChildren()) do
+            if v:IsA("Tool") then            
+                for i = shotMultiAmmount, 0, -1 do            
+                    v.MainGunScript.FireEvent:Fire(mouse)               
+                end
+            end
+        end 
     end
 end)
 print("Loading | 50%")
