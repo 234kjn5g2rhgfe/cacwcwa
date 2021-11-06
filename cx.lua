@@ -1,5 +1,5 @@
 print("Loading GUI")
-local mainName = "Anomic V | 2.7.2"
+local mainName = "Anomic V | 2.7.3"
 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
@@ -83,6 +83,7 @@ local speedBypass = false
 local headHitboxSize = 5
 local autoStore = false
 local Hitboxes = false
+local minHealth = 70
 local AutoHeal = false
 local antiCar = false
 local BDelete = false
@@ -401,6 +402,7 @@ local PLa = Main:addPage("Player", 5012544693)
 local PlrSection = PLa:addSection("Movement")
 local PlrSectionC = PLa:addSection("Crafter Role")
 local plrApp = PLa:addSection("Appearance")
+local plrAppFE = PLa:addSection("FE Stuff")
 local teamSection = PLa:addSection("TeamChanger  (Cooldown)")
 PlrSection:addSlider("Player Fov", 50, 0, 170, function(valuex)
     camera.FieldOfView = valuex
@@ -500,6 +502,9 @@ end)
 PlrSectionC:addToggle("Crafter + Paramedic Auto-heal", nil, function(v)
     AutoHeal = v
 end)
+PlrSectionC:addSlider("Min Health", 1, 0, 100, function(valuex)
+    minHealth = valuex
+end)
 PlrSectionC:addButton("Equip Armor - Helmet + Heavy Vest", function()
     game:GetService("ReplicatedStorage"):FindFirstChild("_CS.Events").PurchaseTeamItem:FireServer("Battle Helmet","Single",nil)
     wait(.4)
@@ -590,6 +595,19 @@ PlrSection:addDropdown("Player Glitch", {"Small", "Larger", }, function(x)
 end)
 plrApp:addButton("Respawn" ,function()   
    game:GetService("ReplicatedStorage")["_CS.Events"].PayLoad:FireServer()
+end)
+plrAppFE:addButton("Anti-Arrest / Remove wanted lvl" ,function()   
+    LPlayer.Character.Head.PlayerDisplay.Wanted:Destroy()
+    LPlayer.Character.Wanted:Destroy()
+end)
+plrAppFE:addButton("Remove Team Name" ,function()   
+    LPlayer.Character.Head.PlayerDisplay.TeamName:Destroy()
+end)
+plrAppFE:addButton("Untradeable" ,function()   
+    LPlayer.Character.HumanoidRootPart.LocalPlayerBG:Destroy()
+end)
+plrAppFE:addButton("Remove Face" ,function()   
+    LPlayer.Character.Head.face:Destroy()
 end)
 teamSection:addDropdown("Team Changer", {"Gunsmith", "Civilian", "Crafter", "Advanced Gunsmith", "Trucker", "Tow Trucker", "Secret Service", "Advanced Car Dealer", "Car Dealer","Deliverant", "Criminal", "Crafter", "Cab Driver", "Paramedic", "Mayor", "Military", "SWAT", "Sheriff"}, function(team)
     game:GetService("ReplicatedStorage"):FindFirstChild("_CS.Events").TeamChanger:FireServer(team)
@@ -1022,10 +1040,8 @@ local UISection = Ui:addSection("Discord : VH - https://discord.gg/x6zYF5zD")
 local UISection = Ui:addSection("H3 : Main Dev")
 
 local changelog = Main:addPage("Changelog", 6022860343)
-local x = changelog:addSection("                                         Changelog | 2.7.1                                     ")
-local x2 = changelog:addSection("Box ESP")
-local x2 = changelog:addSection("Tracer mouse origin")
-local x2 = changelog:addSection("Fixed infinite stam breaking on death")
+local x = changelog:addSection("                                         Changelog | 2.7.3                                     ")
+local x2 = changelog:addSection("More FE Fetures in player tab")
 
 local c = 1
 function zigzag(X)
@@ -1375,7 +1391,7 @@ game:GetService("RunService").RenderStepped:connect(function()
             end                       
         end
     end  
-    if LPlayer.Character.Humanoid.Health < 70 and LPlayer.Character.Humanoid.Health > 0 and AutoHeal then        
+    if LPlayer.Character.Humanoid.Health < minHealth and LPlayer.Character.Humanoid.Health > 0 and AutoHeal then        
         if not LPlayer.Backpack:FindFirstChild("Medi Kit") then
             purchaseItem("Medi Kit")         
         else                     
