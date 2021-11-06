@@ -1,5 +1,5 @@
 print("Loading GUI")
-local mainName = "Anomic V | 2.7.1"
+local mainName = "Anomic V | 2.7.0"
 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
@@ -124,6 +124,10 @@ local function bypass()
                     wait(9e9)
                     return
                 end
+                if method == "Kick" then
+                    print("Server tried kicking you")
+                    wait(9e9)                    
+                end        
                 if tostring(method) == "FireServer" then
                     if shotgunMod1 and tostring(self) == "AmmoRemover" then                        
                         return nil
@@ -141,6 +145,12 @@ local function bypass()
         end
     end)         
 end
+print("Loading anti kick")
+local protect = newcclosure or protect_function
+hookfunction(game:GetService("Players").LocalPlayer.Kick,protect(function() 
+    wait(9e9) 
+end))
+print("anti-kick success")
 local colors = {
     white     = Color3.fromRGB(255,255,255),
     lightGrey = Color3.fromRGB(70,70,70),
