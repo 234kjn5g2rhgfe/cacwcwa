@@ -1,5 +1,5 @@
 print("Loading GUI")
-local mainName = "Anomic V | 2.6.7"
+local mainName = "Anomic V | 2.7.0"
 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
@@ -55,6 +55,7 @@ local esp_Names        = false
 local esp_Health       = false
 local esp_WantedLevel  = false
 local esp_distance     = false
+local esp_boxes        = false
 local esp_tracers      = false
 local esp_tracer_orig  = "Bottom"
 local esp_Main_Colour  = Color3.fromRGB(255, 255, 255)
@@ -596,10 +597,13 @@ end)
 EspSection1:addToggle("ESP Distance", nil, function(state)
    esp_distance = state
 end)
+EspSection1:addToggle("ESP Boxes", nil, function(state)
+    esp_boxes = state
+ end)
 EspSection1:addToggle("ESP Tracers", nil, function(state)
     esp_tracers = state
 end)
-EspSection1:addDropdown("Tracer origin", {"Bottom", "Top"}, function(t)
+EspSection1:addDropdown("Tracer origin", {"Bottom", "Top","Mouse"}, function(t)
     esp_tracer_orig = t
 end)
 EspSection1:addToggle("ESP status level", nil, function(state)
@@ -1292,17 +1296,45 @@ game:GetService("RunService").RenderStepped:connect(function()
                         a:Remove()
                         end)()
                     end   
+                    if esp_boxes and distance < maxDisance and distance > 7 then
+                        local a=Drawing.new("Quad")
+                        a.Visible=true
+                        a.Color=esp_Main_Colour
+                        a.Thickness=1
+                        a.Transparency=1
+                        a.Filled=false
+                        a.PointA=Vector2.new(
+                         game.Workspace.CurrentCamera:WorldToViewportPoint(part.CFrame.Position+part.CFrame.RightVector*-2+part.CFrame.UpVector*2.5).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(part.CFrame.Position+part.CFrame.RightVector*-2+part.CFrame.UpVector*2.5).Y)-->^
+                        a.PointB=Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(part.CFrame.Position+part.CFrame.RightVector*2+part.CFrame.UpVector*2.5).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(part.CFrame.Position+part.CFrame.RightVector*2+part.CFrame.UpVector*2.5).Y)--<^
+                        a.PointC=Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(part.CFrame.Position+part.CFrame.RightVector*2+part.CFrame.UpVector*-2.5).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(part.CFrame.Position+part.CFrame.RightVector*2+part.CFrame.UpVector*-2.5).Y)--<V
+                        a.PointD=Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(part.CFrame.Position+part.CFrame.RightVector*-2+part.CFrame.UpVector*-2.5).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(part.CFrame.Position+part.CFrame.RightVector*-2+part.CFrame.UpVector*-2.5).Y)-->V
+                        coroutine.wrap(function()
+                            game.RunService.RenderStepped:Wait()
+                            a:Remove()
+                        end)()
+                    end
                     if esp_tracers and distance < maxDisance and distance > 7 then                        
                         local t = Drawing.new("Line")
                         t.Visible = true
                         t.Color = esp_Main_Colour
                         t.Thickness = 0.3
-                        t.Transparency = 0.9
+                        t.Transparency = 0.9                        
                         if esp_tracer_orig == "Bottom" then
                             t.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y - 100)       
-                        else
-                            t.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y - 1000)     
-                        end   
+                            else if esp_tracer_orig == "Top" then
+                                t.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y - 1000)  
+                                else if esp_tracer_orig == "Mouse" then
+                                    t.From = Vector2.new(mouse.X, mouse.Y + 40)   
+                                end                           
+                            end 
+                        end
                         t.To = Vector2.new(Vec.X, Vec.Y)          
                         coroutine.wrap(function()
                             game.RunService.RenderStepped:Wait()
