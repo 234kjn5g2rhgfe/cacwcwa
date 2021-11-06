@@ -408,15 +408,28 @@ PlrSection:addToggle("Noclip", nil, function(v)
         Noclipping:Disconnect()
     end
 end)
-PlrSection:addToggle("Infinite Stamina", nil, function(v)
-    infiniteStamina = v    
-    for i,x in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-        if x:IsA("LocalScript") and x.Name ~= "KeyDrawer" and x.Name ~= "Animate" and x.Name ~= "AnimationHandler" then if v then
+local function disableStam(enabled)
+repeat wait() until LPlayer.Character.HumanoidRootPart.Anchored == false    
+    print("Disabled Stam")
+    for i,x in pairs(LPlayer.Character:GetChildren()) do
+        if x:IsA("LocalScript") and x.Name ~= "KeyDrawer" and x.Name ~= "Animate" and x.Name ~= "AnimationHandler" then 
+            if enabled then
                 x.Disabled = true
             else
                 x.Disabled = false
-            end 
+            end
         end 
+    end 
+end
+
+PlrSection:addToggle("Infinite Stamina", nil, function(v)
+    infiniteStamina = v    
+    disableStam(v)
+end)
+game.Players.LocalPlayer.CharacterAdded:Connect(function()
+    if infiniteStamina then    
+        wait(2)
+        disableStam(infiniteStamina)    
     end
 end)
 PlrSection:addToggle("Air Swim", nil, function(v)
@@ -538,7 +551,7 @@ PlrSection:addDropdown("Player Glitch", {"Small", "Larger", }, function(x)
             for i,v in pairs(LPlayer.Character:GetDescendants()) do
                 if v.Name == 'OriginalSize' then
                     v:Destroy()
-                end            
+                end           
             end
         end       
         wait(.8)
@@ -997,6 +1010,13 @@ local creds = Ui:addSection(": Credits :")
 local UISection = Ui:addSection("Makers : H3 and Rhot1c")
 local UISection = Ui:addSection("Discord : VH - https://discord.gg/x6zYF5zD")
 local UISection = Ui:addSection("H3 : Main Dev")
+
+local changelog = Main:addPage("Changelog", 6022860343)
+local x = changelog:addSection("                                         Changelog | 2.7.1                                     ")
+local x2 = changelog:addSection("Box ESP")
+local x2 = changelog:addSection("Tracer mouse origin")
+local x2 = changelog:addSection("Fixed infinite stam breaking on death")
+
 local c = 1
 function zigzag(X)
     return math.acos(math.cos(X * math.pi)) / math.pi
