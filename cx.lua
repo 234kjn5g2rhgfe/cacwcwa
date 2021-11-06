@@ -125,8 +125,8 @@ local function bypass()
                     return
                 end
                 if method == "Kick" then
-                    print("Server tried kicking you")
-                    wait(9e9)                    
+                    notify("Anomic V","Server tried kicking you")
+                    return nil                    
                 end        
                 if tostring(method) == "FireServer" then
                     if shotgunMod1 and tostring(self) == "AmmoRemover" then                        
