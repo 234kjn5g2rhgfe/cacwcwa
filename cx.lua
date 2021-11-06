@@ -1,5 +1,5 @@
 print("Loading GUI")
-local mainName = "Anomic V | 2.7.0"
+local mainName = "Anomic V | 2.7.2"
 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
