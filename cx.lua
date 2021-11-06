@@ -609,8 +609,16 @@ end)
 plrAppFE:addButton("Remove Face" ,function()   
     LPlayer.Character.Head.face:Destroy()
 end)
+local teamSniperValue = ""
+local teamSniperEnabled = false
 teamSection:addDropdown("Team Changer", {"Gunsmith", "Civilian", "Crafter", "Advanced Gunsmith", "Trucker", "Tow Trucker", "Secret Service", "Advanced Car Dealer", "Car Dealer","Deliverant", "Criminal", "Crafter", "Cab Driver", "Paramedic", "Mayor", "Military", "SWAT", "Sheriff"}, function(team)
     game:GetService("ReplicatedStorage"):FindFirstChild("_CS.Events").TeamChanger:FireServer(team)
+end)
+teamSection:addDropdown("Team Snipe Value", {"Gunsmith", "Civilian", "Crafter", "Advanced Gunsmith", "Trucker", "Tow Trucker", "Secret Service", "Advanced Car Dealer", "Car Dealer","Deliverant", "Criminal", "Crafter", "Cab Driver", "Paramedic", "Mayor", "Military", "SWAT", "Sheriff"}, function(team)
+    teamSniperValue = team
+end)
+teamSection:addToggle("Team Sniper", nil, function(v)
+    teamSniperEnabled = v
 end)
 print("Loading | 25%")
 -- ESP Page
@@ -1071,6 +1079,15 @@ coroutine.wrap(function()
                         refreshDisplay(v)				           
                     end
                 end
+            end)
+        end 
+    end
+end)()
+coroutine.wrap(function()
+    while wait(1) do
+        if teamSniperEnabled then   
+            pcall(function()        
+                game:GetService("ReplicatedStorage"):FindFirstChild("_CS.Events").TeamChanger:FireServer(teamSniperValue)            
             end)
         end 
     end
