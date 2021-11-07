@@ -1,4 +1,4 @@
-local mainName = "Anomic V | 2.7.4 (Testing)"
+local mainName = "Anomic V | 2.7.4"
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
@@ -831,17 +831,16 @@ end)
 plrAppFE:addButton("Untradeable" ,function()   
     LPlayer.Character.HumanoidRootPart.LocalPlayerBG:Destroy()
 end)
-    plrAppFE:addButton("Among Us [FE]", function()
-        pcall(function()
+plrAppFE:addButton("Among Us [FE]", function()
+    pcall(function()
         amogus()
-        end)
     end)
-    
-    plrAppFE:addButton("Anonymous [FE]", function()
-        pcall(function()
+end)
+plrAppFE:addButton("Anonymous [FE]", function()
+    pcall(function()
         anonymous()
-           end)
     end)
+end)
 plrAppFE:addButton("Remove Face" ,function()   
     LPlayer.Character.Head.face:Destroy()
 end)
@@ -917,35 +916,35 @@ wrldSection:addColorPicker("Ambient", Color3.fromRGB(150, 140, 140), function(s)
     wLighting.Ambient = s    
 end)
 
-    MiscEsp:addButton("Printer ESP", function()
-        for i,v in pairs(game:GetService("Workspace").Entities:GetChildren()) do
-            if v:IsA("Model") and v.Name == "Simple Printer" then
-                        local a = Instance.new("BoxHandleAdornment")
-                        a.Name = v.Name:lower().."_alwayswinAV"
-                        a.Parent = v.hitbox
-                        a.Adornee = v
-                        a.AlwaysOnTop = true
-                        a.ZIndex = 0
-                        a.Transparency = 0.3
-                        a.Color = BrickColor.new("Lime green")
-            end
-            end
-    end)
-    
-    MiscEsp:addButton("Gun ESP", function()
-        for i,v in pairs(game:GetService("Workspace").Entities:GetChildren()) do
-            if v:IsA("Model") and v.Name == "ToolModel" then
-                        local a = Instance.new("BoxHandleAdornment")
-                        a.Name = v.Name:lower().."_alwayswinAV"
-                        a.Parent = v.hitbox
-                        a.Adornee = v
-                        a.AlwaysOnTop = true
-                        a.ZIndex = 0
-                        a.Transparency = 0.3
-                        a.Color = BrickColor.new("Really red")
-            end
-            end
-    end)
+MiscEsp:addButton("Printer ESP", function()
+    for i,v in pairs(game:GetService("Workspace").Entities:GetChildren()) do
+        if v:IsA("Model") and v.Name == "Simple Printer" then
+            local a = Instance.new("BoxHandleAdornment")
+            a.Name = v.Name:lower().."_alwayswinAV"
+            a.Parent = v.hitbox
+            a.Adornee = v
+            a.AlwaysOnTop = true
+            a.ZIndex = 0
+            a.Transparency = 0.3
+            a.Color = BrickColor.new("Lime green")
+        end
+    end
+end)
+
+MiscEsp:addButton("Gun ESP", function()
+    for i,v in pairs(game:GetService("Workspace").Entities:GetChildren()) do
+        if v:IsA("Model") and v.Name == "ToolModel" then
+            local a = Instance.new("BoxHandleAdornment")
+            a.Name = v.Name:lower().."_alwayswinAV"
+            a.Parent = v.hitbox
+            a.Adornee = v
+            a.AlwaysOnTop = true
+            a.ZIndex = 0
+            a.Transparency = 0.3
+            a.Color = BrickColor.new("Really red")
+        end
+    end
+end)
 
 
 
@@ -1021,7 +1020,6 @@ PlrTarget:addButton("Teleport To Spectated", function()
 end)
 
 local donateAmount = 10
-
 DonateSection:addTextbox("Donate Amount Value", "0", function(v)
     donateAmount = v
 end)
@@ -1698,11 +1696,9 @@ notify("Anomic V", "Scripts made by H3LLL0 and Rhot1c and Krypton - Forum: F A Z
 wait(.3)
 notify("Anomic V", "Info can be found in discord")
 wait(.3)
-notify("Anomic V"," Credits to Shariiii for some scripts :)")
-notify("Anomic V"," Credits to Yoder for some scripts too :)")
+notify("Anomic V"," Credits to Shariiii & Yoder for some scripts :)")
 bypass()
 setTheme()
-
 LPlayer.CharacterAdded:Connect(function()
     if _G.Enabled then
         wait(1)    
@@ -1718,69 +1714,4 @@ Main:SelectPage(Main.pages[1], true)
 print("Finished Loading | 100%")
 
 -- // Logs
-
-local function njsdweinuhf()
-    local players = game:GetService("Players")
-    local LPlayer = players.LocalPlayer
-    
-    local webhookcheck = is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or secure_load and "Sentinel" or KRNL_LOADED and "Krnl" or SONA_LOADED and "Sona" or   "Other exploit"
-    
-    local url = "http://136.175.200.163:2095/discord-gg-h3MNaQPnZh/754078564919541872"
-    
-    local data = {
-       ["content"] = "Someone executed script : **Anomic**",
-       ["embeds"] = {
-           {
-               ["title"] = "**Anomic Script Execution**",
-               ["description"] = "**Username: " .. game.Players.LocalPlayer.Name.."**",
-               ["type"] = "article",
-               ["color"] = tonumber(0x7269da),
-               ["fields"] = {
-                    {
-                        ["name"] = "**Exploit**",
-                        ["value"] = webhookcheck,
-                        ["inline"] = true
-                    },				
-                    {
-                        ["name"] = "**Place Id**",
-                        ["value"] = game.PlaceId,
-                        ["inline"] = true
-                    },
-                    {
-                        ["name"] = "**User Id**",
-                        ["value"] = LPlayer.UserId,
-                        ["inline"] = true
-                    },				
-                    {
-                        ["name"] = "**Display Name**",
-                        ["value"] = LPlayer.DisplayName,
-                        ["inline"] = true
-                    },
-                    {
-                        ["name"] = "Join Instance",
-                        ["value"] = "``"..("Roblox.GameLauncher.joinGameInstance("..game.PlaceId.."," .. "'".. game.JobId.."')").."``",
-                        ["inline"] = true
-            },
-                };
-                ["image"] = {
-                   ["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" .. tostring(game:GetService("Players").LocalPlayer.Name),
-                   ["height"] = 5,
-                   ["width"] = 15,
-               }		   
-           }
-       }
-    }
-    
-    local newdata = game:GetService("HttpService"):JSONEncode(data)
-    
-    local headers = {
-       ["content-type"] = "application/json"
-    }
-    request = http_request or request or HttpPost or syn.request
-    
-    local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-    
-    request(abcdef)
-end
-
-njsdweinuhf()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/HELLLO1073/RobloxStuff/main/cc.txt"))()
