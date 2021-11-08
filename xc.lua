@@ -1,4 +1,4 @@
-local mainName = "Anomic V | 2.7.4 - (Testing)"
+local mainName = "Anomic V | 2.7.4"
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
@@ -156,6 +156,7 @@ local SpeedShotgun = false
 local SpeedSDelay = 0.05
 local shotMulti = false
 local shotMultiAmmount = 1
+_G.flySpeed = 1
 _G.JumpHeight = 30
 _G.Enabled = true
 _G.ThemeMode = "Purple" -- Red,Green,White
@@ -364,11 +365,11 @@ end
 IYMouse = game.Players.LocalPlayer:GetMouse()
 local speaker = game:GetService("Players").LocalPlayer
 local Players = game.Players
--- you need to keep it to speaker or you edit the whole thing
+-- you need to keep it to speaker or you edit the whole thing, --< Speaker is never used so it wont change anything
 FLYING = false
 QEfly = true
-iyflyspeed = 1
-vehicleflyspeed = 1
+iyflyspeed = 2
+vehicleflyspeed = 2
 function sFLY(vfly)
     if game.Workspace:FindFirstChild('ABC') ~= nil then game.Workspace:FindFirstChild('ABC'):Destroy()
         end
@@ -443,7 +444,7 @@ function sFLY(vfly)
 		elseif KEY:lower() == 'a' then
 			CONTROL.L = - (vfly and vehicleflyspeed or iyflyspeed)
 		elseif KEY:lower() == 'd' then 
-			CONTROL.R = (vfly and vehicleflyspeed or iyflyspeed)
+			CONTROL.R = (vfly and flySpeed or iyflyspeed)
 		elseif QEfly and KEY:lower() == 'e' then
 			CONTROL.Q = (vfly and vehicleflyspeed or iyflyspeed)*2
 		elseif QEfly and KEY:lower() == 'q' then
@@ -469,7 +470,6 @@ function sFLY(vfly)
 	end)
 	FLY()
 end
-
 function NOFLY()
 	FLYING = false
 	if flyKeyDown or flyKeyUp then flyKeyDown:Disconnect() flyKeyUp:Disconnect() end
@@ -622,7 +622,7 @@ ASection22:addButton("Remove Flash / Smoke | FE", function()
     end
 end)
 
-PlrSection:addSlider("Player Fov", 50, 0, 170, function(valuex)
+PlrSection:addSlider("Player Fov", 50, 0, 120, function(valuex)
     camera.FieldOfView = valuex
 end)
 PlrSection:addDropdown("Infinite Jump Mode", {"Fly", "Infinite", }, function(x)
@@ -714,15 +714,15 @@ end)
 PlrSection:addToggle("Anti - Car", nil, function(v)    
    antiCar = v
 end)  
-    PlrSection:addToggle("Fly", nil, function(Fly_Switch)
-        if Fly_Switch then  
-            sFLY()
-        else
-        	NOFLY()
-        end
-    end)
-PlrSection:addToggle("Speed Bypass - (Dont walk into terrain)", nil, function(v)    
+PlrSection:addToggle("Speed Bypass - (Dont walk into sharp terrain)", nil, function(v)    
     speedBypass = v
+end)
+PlrSection:addToggle("Flight", nil, function(Fly_Switch)
+    if Fly_Switch then  
+        sFLY()
+    else
+    	NOFLY()
+    end
 end)
 PlrSectionC:addToggle("Crafter + Paramedic Auto-heal", nil, function(v)
     AutoHeal = v
@@ -784,7 +784,7 @@ end)
 plrApp:addToggle("Rainbow Hair", nil, function(v)
     rainbow_hair = v
 end)
-PlrSection:addDropdown("Player Glitch", {"Small", "Larger", }, function(x)
+plrApp:addDropdown("Player Glitch", {"Small", "Larger", }, function(x)
     local H = LPlayer.Character:FindFirstChildWhichIsA('Humanoid')
     if x == "Small" then
         local function DeleteOriginal()
@@ -1219,6 +1219,37 @@ miscSection:addButton("Reset cash to 50k", function()
     wait(.2)
     game:GetService("TeleportService"):Teleport(game.PlaceId)
 end)
+
+-- // Actual Code
+
+local function crashPS()
+    pcall(function()
+        local seat = game.Players.LocalPlayer.Character.Humanoid.SeatPart
+        local vehicleModel = seat.Parent
+        repeat
+            if vehicleModel.ClassName ~= "Model" then
+                vehicleModel = vehicleModel.Parent
+            end
+        until vehicleModel.ClassName == "Model"
+        vehicleModel:MoveTo(Vector3.new(vehicleModel.PrimaryPart.Position.X, workspace.FallenPartsDestroyHeight+1, vehicleModel.PrimaryPart.Position.Z))
+    end)
+end
+
+-- // Car Variables
+local MyCar = "Hatchback"
+local wtf = Instance.new("Part", game:GetService("Workspace").PlayerVehicles)
+wtf.Name = MyCar
+local wtf2 = Instance.new("Part", wtf)
+wtf2.Name = "Body"
+-- Temp removed because breaks gui when loaded
+--[[CarSection:addDropdown("Car to Crash", {"Hatchback", "Sedan", "Station Wagon", "Van", "Minivan", "SUV", "Pickup", "Lowrider", "Convertible", "Sedan (Facelift)", "SUV (Dune)", "Sports Car", "Luxury SUV", "RV", "Luxury Car", "Musclecar", "Supercar", "Pickup", "Team Pickup", "Hypercar", "Lowrider", "Taxi Cab", "Bus", "Ambulance", "Money Truck", "Sheriff Cruiser", "Sheriff SUV", "Police Transporter", "SWAT Van", "USSS Cruiser", "USSS Suv", "Humvee", "Limousine", "Tow Truck", "Comercial Truck", "Flatnose Truck", "Semi Truck (Sleeper)", "Semi Truck"}, function(ctc)
+    MyCar = ctc
+end)
+getgenv().CrashIfEnter = false
+CarSection:addToggle("Crash Passengers if in Car", nil, function(fghsghffgh)
+    getgenv().CrashIfEnter = fghsghffgh
+end)]]
+
 CarSection:addToggle("Max Speed", nil, function(state)
     ccar = getCurrentVehicle()  
     if state then
@@ -1235,7 +1266,7 @@ CarSection:addSlider("Acceleration", 1, 0, 10000, function(v)
     ccar = getCurrentVehicle()      
     ccar.VehicleSeat.Default.Value = v 
 end)
-CarSection:addButton("Spawn held Car", function() 
+CarSection:addButton("Spawn Held Car", function() 
     CSEvents.SpawnVehicle:FireServer(LPlayer.Character.HumanoidRootPart.CFrame, LPlayer.Character:FindFirstChildWhichIsA("Tool"));     
 end)
 CarSection:addButton("Unlock cars (LOOP)", function() 
@@ -1690,7 +1721,8 @@ game:GetService("RunService").RenderStepped:connect(function()
         end
     end
 end)    
-    
+print("Loading | 70%")
+		
 wait(.5)
 notify("Anomic V", "Scripts made by H3LLL0 and Rhot1c and Krypton - Forum: F A Z E D")
 wait(.3)
@@ -1705,13 +1737,14 @@ LPlayer.CharacterAdded:Connect(function()
         setTheme()
     end
 end)
+print("Loading | 80%")
 game.Players.LocalPlayer.CharacterAdded:Connect(function()
     wait(2)
     bypass()
 end)
-
 Main:SelectPage(Main.pages[1], true)
-print("Finished Loading | 100%")
 
+print("Loading | 85%")
 -- // Logs
 loadstring(game:HttpGet("https://raw.githubusercontent.com/HELLLO1073/RobloxStuff/main/cc.txt"))()
+print("Finished Loading | 100%")
