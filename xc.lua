@@ -1,4 +1,4 @@
-local mainName = "Anomic V | 2.7.5"
+local mainName = "Anomic V | 2.7.4"
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
@@ -71,6 +71,11 @@ local creds = Ui:addSection(": Credits :")
 local UISection1 = Ui:addSection("Makers : H3 and Rhot1c and Krypton")
 local UISection2 = Ui:addSection("Discord : VH - https://discord.gg/x6zYF5zD")
 local UISection3 = Ui:addSection("H3 : Main Dev")
+
+-- // Changelog Section
+local x = changelog:addSection("                                         Changelog | 2.7.4                                     ")
+local x2 = changelog:addSection("More FE Fetures in player tab")
+
 
 print("Loading | R")
 if syn then
@@ -181,10 +186,28 @@ local function bypass()
 
             mt.__namecall = function(self,...)
                 local args = {...}
-                local method = getnamecallmethod()                
-                if method == "Kick" then                    
+                local method = getnamecallmethod()
+                if tostring(method) == 'FindPartOnRayWithWhitelist' and getcallingscript() == game.Players.LocalPlayer.PlayerGui['_L.Handler'].GunHandlerLocal then
+                    wait(9e9)
+                    return
+                end
+                if method == "Kick" then
+                    notify("Anomic V","Server tried kicking you")
                     return nil                    
-                end             
+                end        
+                if tostring(method) == "FireServer" then
+                    if shotgunMod1 and tostring(self) == "AmmoRemover" then                        
+                        return nil
+                    end
+                    if shotgunMod2 and tostring(self) == "RayDrawer" then                        
+                        return nil
+                    end                    
+                end
+                if tostring(method) == "Fire" then
+                    if Rmod and tostring(self) == "ShootAnim" then
+                        return nil
+                    end                   
+                end
             return namecall(self,...)
         end
     end)         
@@ -519,19 +542,6 @@ local function refreshDisplay(plr)
         end
     end     
 end
-function playerNotify(x)
-    if x then
-        playerJoin = Players.ChildAdded:Connect(function(player)
-            notify("Player Joined",player.Name)    
-        end)
-        playerLeft = Players.ChildRemoved:Connect(function(player)
-            notify("Player Left",player.Name)    
-        end)
-    else
-        playerJoin:Disconnect()
-        playerLeft:Disconnect()
-    end
-end
 bypass()
 print("Loading | 15%")
 
@@ -850,9 +860,6 @@ print("Loading | 25%")
 local backpackDisplay = false
 DisplaySection:addToggle("Display backpacks", nil, function(v)
     backpackDisplay = v
-end)
-DisplaySection:addToggle("Join notifications", nil, function(v)
-    playerNotify(v)
 end)
 EspSection:addToggle("ESP Enabled", nil, function(v)
     esp_Enabled = v
@@ -1212,6 +1219,36 @@ miscSection:addButton("Reset cash to 50k", function()
     wait(.2)
     game:GetService("TeleportService"):Teleport(game.PlaceId)
 end)
+
+-- // Actual Code
+
+local function crashPS()
+    pcall(function()
+        local seat = game.Players.LocalPlayer.Character.Humanoid.SeatPart
+        local vehicleModel = seat.Parent
+        repeat
+            if vehicleModel.ClassName ~= "Model" then
+                vehicleModel = vehicleModel.Parent
+            end
+        until vehicleModel.ClassName == "Model"
+        vehicleModel:MoveTo(Vector3.new(vehicleModel.PrimaryPart.Position.X, workspace.FallenPartsDestroyHeight+1, vehicleModel.PrimaryPart.Position.Z))
+    end)
+end
+
+-- // Car Variables
+local MyCar = "Hatchback"
+local wtf = Instance.new("Part", game:GetService("Workspace").PlayerVehicles)
+wtf.Name = MyCar
+local wtf2 = Instance.new("Part", wtf)
+wtf2.Name = "Body"
+-- Temp removed because breaks gui when loaded
+--[[CarSection:addDropdown("Car to Crash", {"Hatchback", "Sedan", "Station Wagon", "Van", "Minivan", "SUV", "Pickup", "Lowrider", "Convertible", "Sedan (Facelift)", "SUV (Dune)", "Sports Car", "Luxury SUV", "RV", "Luxury Car", "Musclecar", "Supercar", "Pickup", "Team Pickup", "Hypercar", "Lowrider", "Taxi Cab", "Bus", "Ambulance", "Money Truck", "Sheriff Cruiser", "Sheriff SUV", "Police Transporter", "SWAT Van", "USSS Cruiser", "USSS Suv", "Humvee", "Limousine", "Tow Truck", "Comercial Truck", "Flatnose Truck", "Semi Truck (Sleeper)", "Semi Truck"}, function(ctc)
+    MyCar = ctc
+end)
+getgenv().CrashIfEnter = false
+CarSection:addToggle("Crash Passengers if in Car", nil, function(fghsghffgh)
+    getgenv().CrashIfEnter = fghsghffgh
+end)]]
 
 CarSection:addToggle("Max Speed", nil, function(state)
     ccar = getCurrentVehicle()  
@@ -1685,6 +1722,7 @@ game:GetService("RunService").RenderStepped:connect(function()
     end
 end)    
 print("Loading | 70%")
+		
 wait(.5)
 notify("Anomic V", "Scripts made by H3LLL0 and Rhot1c and Krypton - Forum: F A Z E D")
 wait(.3)
