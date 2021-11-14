@@ -1,4 +1,4 @@
-local mainName = "Anomic V | 2.7.5"
+local mainName = "Anomic V | 2.7.6"
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
