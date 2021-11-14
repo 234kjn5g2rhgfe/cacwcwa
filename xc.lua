@@ -2,6 +2,7 @@ local mainName = "Anomic V | 2.7.5"
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
+
 print("Loading | LIB")
 
 -- Library
@@ -9,18 +10,16 @@ local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Green
 local Main = library.new(mainName)
 
 -- // Tabs
-local PLa = Main:addPage("Client", 5012544693)
+local PLa = Main:addPage("Player", 5012544693)
 local CombatTab = Main:addPage("Combat", 6034509993)
 local Esp = Main:addPage("Visuals", 5012544693)
-local Other = Main:addPage("Other Players", 6031280883)
+local Other = Main:addPage("Others", 6031280883)
 local tele = Main:addPage("Teleportation", 6031280883)
 local Buy = Main:addPage("Guns", 6034509993)
 local misc = Main:addPage("Miscellaneous", 6034509993)
-local Ui = Main:addPage("UI", 6022860343)
-local changelog = Main:addPage("Changelog", 6022860343)
+local Ui = Main:addPage("Settings", 6022860343)
 
 -- // Sections
-
 -- // Combat Section
 local ASection1 = CombatTab:addSection("Head Hitboxes")
 local ASection2 = CombatTab:addSection("Shotgun Mods - (Turn off for other weapons)")
@@ -40,10 +39,11 @@ local EspSection1 = Esp:addSection("ESP Configuration")
 local wrldSection = Esp:addSection("Client World")
 local MiscEsp = Esp:addSection("Miscellaneous ESP")
 
--- // Other Section
-local PlrTarget = Other:addSection("Player Targeting")
+-- // Other Section 
+local specificSection = Other:addSection("Specific Section")
+local PlrTarget = Other:addSection("Other Players")
 local DonateSection = Other:addSection("Donate Section")
-local OtherSection0 = Other:addSection("Trolling")
+local OtherSection0 = Other:addSection("Trolling") 
 
 -- // Teleport Section
 local teleSection1 = tele:addSection("Player")
@@ -52,7 +52,7 @@ local teleSection3 = tele:addSection("Safe spots")
 local teleSection4 = tele:addSection("Miscellaneous")
 
 -- // Buy Section
-local paintSection    = Buy:addSection("Painting")
+local paintSection = Buy:addSection("Painting")
 local BuySectionAmmo = Buy:addSection("Ammo Buyer")
 local BuySectionMisc2 = Buy:addSection("Misc / Troll")
 
@@ -60,6 +60,7 @@ local BuySectionMisc2 = Buy:addSection("Misc / Troll")
 local miscSection = misc:addSection("Miscellaneous")
 local wepSection = misc:addSection("Miscellaneous Tools")
 local CarSection = misc:addSection("Miscellaneous Vehicle")
+local AnimationSection = misc:addSection("Animations")
 local boomSection = misc:addSection("Boombox Player (Hold Boombox)")
 
 -- // UI Section
@@ -67,19 +68,12 @@ local ThemeSection = Ui:addSection("Theme")
 local UISection = Ui:addSection("UI")
 
 -- // Credits Section
-local creds = Ui:addSection(": Credits :")
-local UISection1 = Ui:addSection("Makers : H3 and Rhot1c and Krypton")
-local UISection2 = Ui:addSection("Discord : VH - https://discord.gg/x6zYF5zD")
-local UISection3 = Ui:addSection("H3 : Main Dev")
-
--- // Changelog Section
-local x = changelog:addSection("                                         Changelog | 2.7.4                                     ")
-local x2 = changelog:addSection("More FE Fetures in player tab")
-
+local creds = Ui:addSection("Developers: H3#3534, Krypton#3195.")
+local UISection2 = Ui:addSection("Discord: https://discord.io/anomicv")
 
 print("Loading | R")
 if syn then
-    syn.request({
+    syn.request({ 
         Url = "http://127.0.0.1:6463/rpc?v=1",
         Method = "POST",
         Headers = {
@@ -106,14 +100,6 @@ chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Positio
 print("LIB Success")
 print("Loading | 1%")
 
--- Themes
-local themes  = 
-{Background   = Color3.fromRGB(24, 24, 24),
-Glow          = Color3.fromRGB(255, 255, 255),
-Accent        = Color3.fromRGB(10, 10, 10),
-LightContrast = Color3.fromRGB(20, 20, 20),
-DarkContrast  = Color3.fromRGB(14, 14, 14),  
-TextColor     = Color3.fromRGB(255, 255, 255)}
 -- ESP
 local esp_Enabled      = false
 local esp_Names        = false
@@ -156,6 +142,7 @@ local SpeedShotgun = false
 local SpeedSDelay = 0.05
 local shotMulti = false
 local shotMultiAmmount = 1
+local targetHighlight = false
 _G.flySpeed = 1
 _G.JumpHeight = 30
 _G.Enabled = true
@@ -317,7 +304,6 @@ function setTheme()
        end
    end
 end
-
 function playerNotify(x)
     if x then
         playerJoin = Players.ChildAdded:Connect(function(player)
@@ -331,12 +317,30 @@ function playerNotify(x)
         playerLeft:Disconnect()
     end
 end
+function tpCar(seat,Cframe,tpBack)       
+    if seat.Parent:FindFirstChild("VehicleSeat") and not seat:FindFirstChild("SeatWeld") then   
+        seat.Disabled = false
 
+        repeat wait(.10)
+            LPlayer.Character.HumanoidRootPart.CFrame = seat.CFrame          
+        until seat:FindFirstChild('SeatWeld') or not seat.Parent:FindFirstChild('VehicleSeat')
+
+        wait()        
+        LPlayer.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(Cframe)
+        wait(.5)
+        LPlayer.Character:FindFirstChild("Humanoid").Sit = false
+        wait()
+        LPlayer.Character:FindFirstChildOfClass("Humanoid").Jump = true
+        if tpBack then
+            wait()
+            LPlayer.Character.HumanoidRootPart.CFrame = oldCFrame
+        end
+    end      
+end
 function getRoot(char)
     local rootPart = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
     return rootPart
 end
-
 local function amogus()
     LPlayer.Character.UpperTorso.Waist:Destroy()
     local origin = LPlayer.Character.HumanoidRootPart.CFrame
@@ -349,8 +353,7 @@ local function amogus()
     wait(.5)
     LPlayer.Character.Head.Anchored = true
     getRoot(LPlayer.Character).CFrame = origin
-end
-        
+end     
 local function anonymous()
     local originalskin = LPlayer.Character.Head.Color
     game:GetService("ReplicatedStorage")["_CS.Events"].EquipAvatarItem:FireServer("Color",Color3.new(0,0,0),"SkinColor")
@@ -375,7 +378,6 @@ local function anonymous()
         end)
     end)
 end
-
 IYMouse = game.Players.LocalPlayer:GetMouse()
 local speaker = game:GetService("Players").LocalPlayer
 local Players = game.Players
@@ -492,7 +494,6 @@ function NOFLY()
 	end
 	pcall(function() workspace.CurrentCamera.CameraType = Enum.CameraType.Custom end)
 end
-
 local xdisplay = {}
 function xdisplay:addItemDisplay(player)
 	if player.Character.UpperTorso:FindFirstChild("ItemDisplay") then		
@@ -653,8 +654,7 @@ PlrSection:addToggle("Noclip", nil, function(v)
     end
 end)
 local function disableStam(enabled)
-repeat wait() until LPlayer.Character.HumanoidRootPart.Anchored == false    
-    print("Disabled Stam")
+repeat wait() until LPlayer.Character.HumanoidRootPart.Anchored == false       
     for i,x in pairs(LPlayer.Character:GetChildren()) do
         if x:IsA("LocalScript") and x.Name ~= "KeyDrawer" and x.Name ~= "Animate" and x.Name ~= "AnimationHandler" then 
             if enabled then
@@ -725,9 +725,9 @@ PlrSection:addToggle("Air Swim", nil, function(v)
         LPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
     end
 end)
-PlrSection:addToggle("Anti - Car", nil, function(v)    
-   antiCar = v
-end)  
+PlrSection:addToggle("Anti Car", nil, function(v)    
+    antiCar = v
+end)
 PlrSection:addToggle("Speed Bypass - (Dont walk into sharp terrain)", nil, function(v)    
     speedBypass = v
 end)
@@ -832,7 +832,7 @@ plrApp:addDropdown("Player Glitch", {"Small", "Larger", }, function(x)
         end        
     end
 end)
-plrApp:addButton("Respawn" ,function()   
+plrApp:addButton("Respawn" ,function() 
    game:GetService("ReplicatedStorage")["_CS.Events"].PayLoad:FireServer()
 end)
 plrAppFE:addButton("Anti-Arrest / Remove wanted lvl" ,function()   
@@ -963,14 +963,12 @@ MiscEsp:addButton("Gun ESP", function()
     end
 end)
 
-
-
 local targetName = nil;
 local plrNum = 1
-PlrTarget:addTextbox("Target Name", "Default", function(plr)    
+specificSection:addTextbox("Target Name", "Default", function(plr)    
     targetName = plr
 end)
-PlrTarget:addButton("Teleport to target", function()
+specificSection:addButton("Teleport to target", function()
     for i,v in pairs(game:service'Players':GetPlayers()) do
         if v.Name:match(targetName) then
             LPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame * CFrame.new(0,2,0)
@@ -978,17 +976,20 @@ PlrTarget:addButton("Teleport to target", function()
         end
     end
 end)
-PlrTarget:addButton("View target", function()
+specificSection:addButton("View target", function()
     for i,v in pairs(game:service'Players':GetPlayers()) do
         if v.Name:match(targetName) then
             workspace.Camera.CameraSubject = v.Character.Humanoid
         end
     end
 end)
-PlrTarget:addButton("Reset Camera", function()    
+specificSection:addButton("Reset Camera", function()    
     workspace.Camera.CameraSubject = LPlayer.Character.Humanoid       
 end)
-PlrTarget:addButton("Get Backpack items", function()    
+specificSection:addToggle("Highlight Targtet", nil, function(x)   
+    targetHighlight = x
+end)
+specificSection:addButton("Get Backpack items", function()    
     for i,v in pairs(Players:GetChildren()) do
         if v.Name:match(targetName) then
             for c,x in pairs(v.Backpack:GetChildren()) do
@@ -997,7 +998,6 @@ PlrTarget:addButton("Get Backpack items", function()
         end
     end  
 end)
-
 PlrTarget:addButton("View Next Player", function()
     if plrNum < #game.Players:GetPlayers() then
         plrNum = plrNum + 1
@@ -1074,6 +1074,8 @@ OtherSection0:addToggle("Arrest all", nil, function(state)
     autoArrest = state
 end)
 
+-- start of bring all cars
+--end of bring all cars
 
 local currentVehicle;
 coroutine.wrap(function()
@@ -1094,6 +1096,7 @@ teleSection1:addKeybind("Click TP Keybind", nil, function()
         end
     end
 end)
+--< teleportation
 teleSection2:addButton("Arway", function()
 if currentVehicle ~= nil then
     currentVehicle:SetPrimaryPartCFrame(CFrame.new(1861.14111, -65.5734253, -1310.6853, 0.998740196, 0, -0.0501802117, 0, 1, 0, 0.0501802117, 0, 0.998740196) * CFrame.new(0,5,0))
@@ -1116,7 +1119,19 @@ else
 LPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1751.93347, 77.9265747, 556.575073, 0.99836874, 0, 0.0570888072, 0, 1, 0, -0.0570888072, 0, 0.99836874)end end)
 teleSection2:addButton("Okby Steppe", function()
 if currentVehicle ~= nil then
-    currentVehicle:SetPrimaryPartCFrame(CFrame.new(3894.29224, -2.04217577, -3309.31274, 0.819154441, 5.08817486e-08, 0.573573053, -8.20474284e-08, 1, 2.84667561e-08, -0.573573053, -7.03788601e-08, 0.819154441) * CFrame.new(0,5,0))
+    currentVehicle:SetPrimaryPartCFrame(CFrame.new(3894.29224, -2.04217577, -3309.31274, 0.819154441, 5.08817486e-08, 0.573573053, -8.20474284e-08, 1, 2.84667561e-08, -0.573573053, -7.03788601e-08, 0.819154441, -7.03788601e-08, 0.819154441) * CFrame.new(0,5,0))
+else 
+LPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(3894.29224, -2.04217577, -3309.31274, 0.819154441, 5.08817486e-08, 0.573573053, -8.20474284e-08, 1, 2.84667561e-08, -0.573573053, -7.03788601e-08, 0.819154441)end end)
+
+teleSection2:addButton("Hospital", function()
+if currentVehicle ~= nil then
+    currentVehicle:SetPrimaryPartCFrame(CFrame.new(1620.60095, -65.4234238, -1399.48181, -0.0176989716, 0, -0.99984318, 0, 1, 0, 0.99984318, 0, -0.0176989716) * CFrame.new(0,5,0))
+else 
+LPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1620.60095, -65.4234238, -1399.48181, -0.0176989716, 0, -0.99984318, 0, 1, 0, 0.99984318, 0, -0.0176989716)end end)
+
+teleSection2:addButton("Police Station", function()
+if currentVehicle ~= nil then
+currentVehicle:SetPrimaryPartCFrame(CFrame.new(3894.29224, -2.04217577, -3309.31274, 0.819154441, 5.08817486e-08, 0.573573053, -8.20474284e-08, 1, 2.84667561e-08, -0.573573053, -7.03788601e-08, 0.819154441) * CFrame.new(0,5,0))
 else 
 LPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(3894.29224, -2.04217577, -3309.31274, 0.819154441, 5.08817486e-08, 0.573573053, -8.20474284e-08, 1, 2.84667561e-08, -0.573573053, -7.03788601e-08, 0.819154441)end end)
 teleSection2:addButton("Depository", function()
@@ -1323,6 +1338,40 @@ coroutine.wrap(function()
             end)
         end 
     end
+end)()
+local Character_Parts ={ "Head","LeftHand","LeftLowerArm","LeftUpperArm","RightHand","RightLowerArm","RightUpperArm","UpperTorso","LowerTorso","RightFoot","RightLowerLeg","RightUpperLeg","LeftFoot","LeftLowerLeg","LeftUpperLeg"}
+coroutine.wrap(function()
+    while wait(1)do
+        pcall(function()            
+            if targetHighlight then
+                for _,v in pairs(Players:GetPlayers()) do
+                    if v.Name ~= LPlayer.Name and v.Name:match(targetName) then
+                        for _,c in pairs(Character_Parts)do
+                            if v.Character:FindFirstChild(c)then
+                                local part=v.Character[c]
+                                local a=Instance.new("BoxHandleAdornment")
+                                if c=="Head"then
+                                    a.Size=Vector3.new(1.05,1.05,1.05)
+                                else
+                                    a.Size=part.Size+Vector3.new(.05,.05,.05)
+                                end
+                                a.Parent=game.CoreGui
+                                a.AlwaysOnTop=true
+                                a.Adornee=part
+                                a.ZIndex=0
+                                a.Transparency = 0.7
+                                a.Color3 = Color3.fromRGB(255,255,0)
+                                coroutine.wrap(function()
+                                    wait(1)
+                                    a:Destroy()
+                                end)()                             
+                            end
+                        end
+                    end
+                end
+            end		
+		end)
+	end
 end)()
 coroutine.wrap(function()
     while wait(1) do
@@ -1685,12 +1734,14 @@ game:GetService("RunService").RenderStepped:connect(function()
         end
     end  
     if speedBypass and LPlayer.Character ~= nil and LPlayer.Character.Humanoid and LPlayer.Character.Humanoid.Parent then
-      if LPlayer.Character.Humanoid.MoveDirection.Magnitude > 0 then
-         LPlayer.Character:TranslateBy(LPlayer.Character.Humanoid.MoveDirection)
-      end        
+        if LPlayer.Character.Humanoid.MoveDirection.Magnitude > 0 then
+            LPlayer.Character:TranslateBy(LPlayer.Character.Humanoid.MoveDirection)
+        end        
     end  
     if antiCar and LPlayer.Character ~= nil and LPlayer.Character then
-      LPlayer.Character.HumanoidRootPart.TouchInterest:Destroy()
+        if LPlayer.Character.HumanoidRootPart:FindFirstChild("TouchInterest") then
+            LPlayer.Character.HumanoidRootPart.TouchInterest:Destroy()
+        end
     end 
     if BDelete then
         if folderImpacts:FindFirstChild("Part") then
@@ -1705,11 +1756,10 @@ end)
 print("Loading | 70%")
 		
 wait(.5)
-notify("Anomic V", "Scripts made by H3LLL0 and Rhot1c and Krypton - Forum: F A Z E D")
+notify("Anomic V", "Scripts made by H3LLL0 and Krypton - Forum name: F A Z E D")
 wait(.3)
 notify("Anomic V", "Info can be found in discord")
 wait(.3)
-notify("Anomic V"," Credits to Shariiii & Yoder for some scripts :)")
 bypass()
 setTheme()
 LPlayer.CharacterAdded:Connect(function()
