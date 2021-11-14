@@ -70,6 +70,7 @@ local UISection = Ui:addSection("UI")
 -- // Credits Section
 local creds = Ui:addSection("Developers: H3#3534, Krypton#3195.")
 local UISection2 = Ui:addSection("Discord: https://discord.io/anomicv")
+local UISection2 = Ui:addSection("Creds: EdgeIY, for the fly")
 
 print("Loading | R")
 if syn then
@@ -379,9 +380,7 @@ local function anonymous()
     end)
 end
 IYMouse = game.Players.LocalPlayer:GetMouse()
-local speaker = game:GetService("Players").LocalPlayer
 local Players = game.Players
--- you need to keep it to speaker or you edit the whole thing, --< Speaker is never used so it wont change anything
 FLYING = false
 QEfly = true
 iyflyspeed = 2
@@ -1073,9 +1072,6 @@ local autoArrest = false
 OtherSection0:addToggle("Arrest all", nil, function(state)
     autoArrest = state
 end)
-
--- start of bring all cars
---end of bring all cars
 
 local currentVehicle;
 coroutine.wrap(function()
