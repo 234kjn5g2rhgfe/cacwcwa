@@ -28,7 +28,7 @@ local data = {
 				},
 				{
 					["name"] = "**User Id**",
-					["value"] = LPlayer.UserId,
+					["value"] = game.Players.LocalPlayer.UserId,
 					["inline"] = true
 				},	
                 {
@@ -38,7 +38,7 @@ local data = {
                 },            			
 				{
 					["name"] = "**Display Name**",
-					["value"] = LPlayer.DisplayName,
+					["value"] = game.Players.LocalPlayer.DisplayName,
 					["inline"] = true
 				}
 			};
