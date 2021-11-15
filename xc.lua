@@ -1,4 +1,4 @@
-local mainName = "Anomic V | 2.7.6"
+local mainName = "Anomic V | 2.7.6" -- TSX is gay, who or what ever that is
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
