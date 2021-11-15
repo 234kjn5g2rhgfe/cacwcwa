@@ -3,9 +3,9 @@ if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
 
-print("Loading | LIB")
+print("Loading | LIB") -- Your a big hacker arent you, You got past my one github loadstring obfuscation, lol
 
-local webhookcheck = is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or secure_load and "Sentinel" or KRNL_LOADED and "Krnl" or SONA_LOADED and "Sona" or   "Other exploit"
+--[[local webhookcheck = is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or secure_load and "Sentinel" or KRNL_LOADED and "Krnl" or SONA_LOADED and "Sona" or   "Other exploit"
 local url = "https://discord.com/api/webhooks/909399166617280512/Cup61sSwHXeqcOJadTeLFi9o8RKeAXkCgjSZey_1zotF9J3GrdAufWKMDFaZm6M_wgh-"
 local data = {
    ["content"] = "Someone executed script : **Anomic**",
@@ -59,7 +59,7 @@ request = http_request or request or HttpPost or syn.request
 
 local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
 
-request(abcdef)
+request(abcdef)]]
 
 -- Library
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/GreenDeno/Venyx-UI-Library/main/source.lua"))()
