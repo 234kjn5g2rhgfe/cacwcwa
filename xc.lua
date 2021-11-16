@@ -141,7 +141,7 @@ if syn then
     Body = game:GetService("HttpService"):JSONEncode({
         cmd = "INVITE_BROWSER",
         args = {
-            code = "chBXmh2C4Q"
+            code = "jhb37CBT8U"
         },
             nonce = game:GetService("HttpService"):GenerateGUID(false)
         }),
