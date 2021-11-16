@@ -125,7 +125,7 @@ local UISection = Ui:addSection("UI")
 
 -- // Credits Section
 local creds = Ui:addSection("Developers: H3#3534, Krypton#3195.")
-local UISection2 = Ui:addSection("Discord: https://discord.io/anomicv")
+local UISection2 = Ui:addSection("Discord: https://discord.gg/jhb37CBT8U")
 local UISection2 = Ui:addSection("Creds: EdgeIY, for the fly")
 
 print("Loading | R")
