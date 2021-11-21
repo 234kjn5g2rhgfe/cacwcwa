@@ -1,65 +1,9 @@
-local mainName = "Anomic V | 2.7.6" -- TSX is gay, who or what ever that is
+local mainName = "Anomic V | 2.7.7" -- TSX is gay, who or what ever that is
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
 
 print("Loading | LIB") -- Your a big hacker arent you, You got past my one github loadstring obfuscation, lol
-
---[[local webhookcheck = is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or secure_load and "Sentinel" or KRNL_LOADED and "Krnl" or SONA_LOADED and "Sona" or   "Other exploit"
-local url = "haha, good joke"
-local data = {
-   ["content"] = "Someone executed script : **Anomic**",
-   ["embeds"] = {
-       {
-           ["title"] = "**Anomic Script execution**",
-           ["description"] = "**Username: " .. game.Players.LocalPlayer.Name.."**",
-           ["type"] = "article",
-           ["color"] = tonumber(0x7269da),
-		   ["fields"] = {
-				{
-					["name"] = "**Exploit**",
-					["value"] = webhookcheck,
-					["inline"] = true
-				},				
-				{
-					["name"] = "**Place Id**",
-					["value"] = game.PlaceId,
-					["inline"] = true
-				},
-				{
-					["name"] = "**User Id**",
-					["value"] = game.Players.LocalPlayer.UserId,
-					["inline"] = true
-				},	
-                {
-                    ["name"] = "Join Instance",
-                    ["value"] = "``"..("Roblox.GameLauncher.joinGameInstance("..game.PlaceId.."," .. "'".. game.JobId.."')").."``",
-                    ["inline"] = true
-                },            			
-				{
-					["name"] = "**Display Name**",
-					["value"] = game.Players.LocalPlayer.DisplayName,
-					["inline"] = true
-				}
-			};
-            ["image"] = {
-               ["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" .. tostring(game:GetService("Players").LocalPlayer.Name),
-			   ["height"] = 5,
-			   ["width"] = 15,
-           }		   
-       }
-   }
-}
-
-local newdata = game:GetService("HttpService"):JSONEncode(data)
-local headers = {
-   ["content-type"] = "application/json"
-}
-request = http_request or request or HttpPost or syn.request
-
-local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-
-request(abcdef)]]
 
 -- Library
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/GreenDeno/Venyx-UI-Library/main/source.lua"))()
@@ -1053,6 +997,32 @@ specificSection:addButton("Get Backpack items", function()
         end
     end  
 end)
+specificSection:addButton("TP cars to target", function()
+    oldCFrame = LPlayer.Character.HumanoidRootPart.CFrame
+    for i,v in pairs(game:GetService("Workspace").PlayerVehicles:GetChildren()) do
+        if v:FindFirstChild("VehicleSeat") and v ~= nil and v:FindFirstChild("VehicleSeat").Damage.Value > 1 and not v:FindFirstChild("VehicleSeat"):FindFirstChild("SeatWeld") then
+            local Carseat = v:FindFirstChild("VehicleSeat")        
+            Carseat.Disabled = false                 
+            if Carseat ~= nil and Carseat then
+                if Carseat.Parent:FindFirstChild("VehicleSeat") and not Carseat:FindFirstChild("SeatWeld") then   
+                    Carseat.Disabled = false        
+                    for i = 5, 0, -1 do        
+                        wait(.10)
+                        LPlayer.Character.HumanoidRootPart.CFrame = Carseat.CFrame           
+                    end        
+                    wait(.2)  
+                    for i,p in pairs(Players:GetChildren()) do
+                        if p.Name:match(targetName) and LPlayer.Character.Humanoid.SeatPart ~= nil then                           
+                            Carseat.Parent:MoveTo(p.Character.HumanoidRootPart.CFrame.Position)	 
+                        end
+                    end                                		
+                    wait(.4)
+                    LPlayer.Character.HumanoidRootPart.CFrame = oldCFrame                                                        
+                end
+            end   
+        end
+    end
+end)
 PlrTarget:addButton("View Next Player", function()
     if plrNum < #game.Players:GetPlayers() then
         plrNum = plrNum + 1
@@ -1330,10 +1300,42 @@ CarSection:addButton("Unlock cars (LOOP)", function()
         end
     end
 end)
-CarSection:addButton("Fill all cars - (minus cash)", function()
-    for i,v in pairs(workspace.PlayerVehicles:GetChildren()) do
-		game:GetService("ReplicatedStorage")["_CS.Events"].FillUpCar:FireServer(v, 100)        
-	end 
+CarSection:addButton("Bring all cars", function() 
+    oldCFrame = LPlayer.Character.HumanoidRootPart.CFrame
+    for i,v in pairs(game:GetService("Workspace").PlayerVehicles:GetChildren()) do
+        if v:FindFirstChild("VehicleSeat") and v ~= nil and v:FindFirstChild("VehicleSeat").Damage.Value > 1 and not v:FindFirstChild("VehicleSeat"):FindFirstChild("SeatWeld") then
+            local Carseat = v:FindFirstChild("VehicleSeat")        
+            Carseat.Disabled = false      
+            wait(1)   
+            if Carseat ~= nil and Carseat then
+                if Carseat.Parent:FindFirstChild("VehicleSeat") and not Carseat:FindFirstChild("SeatWeld") then   
+                    Carseat.Disabled = false        
+                    for i = 20, 0, -1 do        
+                        wait(.15)
+                        LPlayer.Character.HumanoidRootPart.CFrame = Carseat.CFrame           
+                    end        
+                    wait()  
+                    if LPlayer.Character.Humanoid.SeatPart ~= nil then      
+                        LPlayer.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(oldCFrame * CFrame.new(0,2,0))
+                        wait(1)
+                        LPlayer.Character:FindFirstChild("Humanoid").Sit = false
+                        wait()
+                        LPlayer.Character:FindFirstChildOfClass("Humanoid").Jump = true
+                    else
+                        LPlayer.Character.HumanoidRootPart.CFrame = oldCFrame
+                    end                            
+                end
+            end   
+        end
+    end
+end)
+CarSection:addButton("Crash passengers", function() 
+    seat = game.Players.LocalPlayer.Character.Humanoid.SeatPart
+    seat.Parent:MoveTo(Vector3.new(seat.Parent.PrimaryPart.Position.X, workspace.FallenPartsDestroyHeight+1, seat.Parent.PrimaryPart.Position.Z))
+end)
+CarSection:addButton("Skydive passengers", function() 
+    seat = game.Players.LocalPlayer.Character.Humanoid.SeatPart
+    seat.Parent:MoveTo(Vector3.new(seat.Parent.PrimaryPart.Position.X, seat.Parent.PrimaryPart.Position.Y + 30000, seat.Parent.PrimaryPart.Position.Z))
 end)
 
 boomSection:addButton("Stop Song", function() 
