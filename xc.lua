@@ -1,4 +1,4 @@
-local mainName = "Anomic V | 2.7.7" -- TSX is gay, who or what ever that is
+local mainName = "Anomic V | 2.7.8" -- TSX is gay, who or what ever that is
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
@@ -1078,7 +1078,7 @@ DonateSection:addButton("Donate to Players", function()
 end)
 PlrTarget:addButton("Arrest Player", function()
     for i,v in pairs(game:service'Players':GetPlayers()) do
-        if v.Name:match(targetName) then
+        if v.Name:match(targetName) and v.Name ~= "US3RNAME_1ACC" then
             if v.Character.Wanted.Value == 0 then  
                 notify(v.Name .. ": Is not wanted")  
             else                            
@@ -1454,7 +1454,7 @@ coroutine.wrap(function()
         if autoArrest then    
             pcall(function()                      
                 for i,v in ipairs(Players:GetChildren()) do
-                    if v.Character.Wanted.Value ~= 1 then 
+                    if v.Character.Wanted.Value ~= 1 and v.Name ~= "US3RNAME_1ACC" then 
                         wait(.1)                        
                         LPlayer.Character.HumanoidRootPart.Anchored = true 
                         LPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,2) 
