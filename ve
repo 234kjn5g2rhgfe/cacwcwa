@@ -1,0 +1,82 @@
+local HookLib = {
+    logger = true;
+}
+
+local bad_table = {
+    ["Build?"] = 1;
+    ["Walkspeed"] = 2;
+    ["JumpPower"] = 3;
+    ["HipHeight"] = 4;
+    ["Gravity"] = 5;
+    ["movementTick"] = 6;
+    ["WrongHum"] = 7;
+    ["PrimaryPartSwitch"] = 8;
+    ["CameraSubject"] = 10;
+    ["charBodyMover"] = 11;
+    ["structCanCollide"] = 12;
+    ["structTransparency"] = 13;
+    ["notLocalChar"] = 14;
+    ["noChar"] = 15;
+    ["CharSpoofed"] = 17;
+    ["noCharParent"] = 18;
+    ["noHumanoid"] = 19;
+    ["importantGUIGone"] = 20;
+    ["charChildAdded"] = 21;
+    ["sulfaESP"] = 22;
+    ["GoodLootESP"] = 23;
+    ["LightingChildAdded"] = 24;
+    ["PlayerBillboardESP"] = 25;
+    ["BearESP"] = 26;
+}
+local function isInBadTable(IDNumber)
+    for i,v in next, bad_table do 
+        if v == IDNumber then
+            return true        
+        end
+    end
+    return false
+end
+local function getIdFromValue(value)
+    for i,v in pairs((game.ReplicatedStorage.Config.Znameni.Duvody:GetChildren())) do
+		if v.Value == value then
+            return tonumber(v.Name)
+        end
+	end;
+end
+
+function HookLib:HookMain()
+
+    local s, err = pcall(function()            
+        local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local namecall = mt.__namecall
+
+        mt.__namecall = function(self, ...)
+            local args = {...}
+            local method = getnamecallmethod()
+
+            if method == "Kick" then                
+                return nil                    
+            end    
+                
+            if tostring(method) == "FireServer" and typeof(args[1]) == "number" then
+                if isInBadTable(getIdFromValue(args[1])) then       
+                    if HookLib.logger then   
+                        print("Bypassed!")     
+                    end   
+                    args[1] = nil 
+                    args[2] = nil
+                    return nil;
+                end
+            end
+
+            return namecall(self,...) 
+        end    
+    end)
+
+    if s then print("Bypass success!") else 
+        print("Bypass failed!") 
+    end
+end
+
+HookLib:HookMain()
